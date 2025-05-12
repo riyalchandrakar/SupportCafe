@@ -42,7 +42,7 @@ const ReadMorePage = () => {
           </ul>
           <h3 className="text-xl font-semibold mt-4 mb-2">How to Set Up a Razorpay Account</h3>
           <ol className="list-decimal list-inside">
-            <li><strong>Sign Up on Razorpay:</strong> Visit <a href="https://razorpay.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Razorpay’s website</a> and sign up for an account.</li>
+            <li><strong>Sign Up on Razorpay:</strong> Visit <a href="https://razorpay.com" target="_blank" rel="noopener noreferrer" className="text-text underline">Razorpay’s website</a> and sign up for an account.</li>
             <li><strong>Verify Your Identity:</strong> Complete the necessary verification steps to ensure the security of your account.</li>
             <li><strong>Retrieve Your API Keys:</strong> After setting up your account, navigate to the API section to get your Razorpay Account ID and Secret Key.</li>
             <li><strong>Link to SupportCafe:</strong> Enter your Razorpay Account ID and Secret Key on your SupportCafe Dashboard to enable payment processing.</li>
@@ -51,7 +51,7 @@ const ReadMorePage = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-2">Start Your Journey Today</h2>
           <p>Don&apos;t let funding be a barrier to your dreams. Join SupportCafe and connect with a community that wants to see you succeed. Create your project today, share your vision, and start collecting the funds you need to make your project a reality.</p>
-          <p>For more information or assistance, feel free to <a href="mailto:support@SupportCafe.com" className="text-blue-600 underline">contact our support team</a>. We’re here to help you every step of the way.</p>
+          <p>For more information or assistance, feel free to <a href="mailto:support@SupportCafe.com" className="text-text underline">contact our support team</a>. We’re here to help you every step of the way.</p>
         </section>
       </main>
       <footer className="text-center mt-8">

@@ -56,10 +56,10 @@ export default async function Profile({ params }) {
           {payments.length > 0 ? (
             <ul className="space-y-4">
               {payments.map(payment => (
-                <li key={payment._id} className="bg-gray-700/50 p-4 rounded-lg hover:bg-gray-700 transition">
+                <li key={payment._id} className="bg-gray-700/50 p-4 rounded-lg hover:bg-primary transition">
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-medium text-blue-400">
+                      <p className="font-medium text-text">
                         {payment.name}
                       </p>
                       {payment.message && (

@@ -7,7 +7,7 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 const Login = () => {
     const { data: session } = useSession()
     const router = useRouter()
-    // document.title = "Login - Get Me A Chai"
+    // document.title = "Login - Support Cafe"
 
     useEffect(() => {
         if (session) {
@@ -32,7 +32,7 @@ const Login = () => {
                     <div className="flex flex-col gap-2 min-h-screen ">
                         <button
                             onClick={() => { signIn("google") }}
-                            className="flex gap-2 items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            className="flex gap-2 items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-text hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                             <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                                 viewBox="-0.5 0 48 48" version="1.1">
 
@@ -60,7 +60,7 @@ const Login = () => {
 
                         <button
                             onClick={() => { signIn("github") }}
-                            className="flex gap-2 items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            className="flex gap-2 items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-text hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                             <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                                 viewBox="0 0 73 73" version="1.1">
                                 <g id="team-collaboration/version-control/github" stroke="none" strokeWidth="1" fill="none"

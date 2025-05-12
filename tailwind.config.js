@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -7,14 +8,15 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      colors: {
+        primary: "#6A0DAD",      // Purple shade for primary color
+        secondary: "#9B4D96",    // Lighter purple for accent color
+        background: "#F3E8FF",   // Light lavender/purple background
+        text: "#4B0082",         // Dark purple for text
       },
     },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
-    ]
+  ],
 };

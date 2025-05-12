@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Get Me A Chai - Get your project funded",
+  title: "Support Cafe - Get your project funded",
   description: "A crowdfunding platform for getting your project funded",
 };
 

@@ -1,9 +1,9 @@
-# Get Me A Chai
+# Support Cafe
 
 [https://fund-me-chai.vercel.app](SupportCafe)
 
 ## Project Description
-Get Me A Chai is a crowdfunding platform created using Next.js (app route), React, MongoDB, and Node.js. It is designed for developers who need funds to complete their projects. Fans and supporters of developers or project creators can support them by sending funds. Developers need a Razorpay account to receive funds and must generate a client ID and secret. 
+Support Cafe is a crowdfunding platform created using Next.js (app route), React, MongoDB, and Node.js. It is designed for developers who need funds to complete their projects. Fans and supporters of developers or project creators can support them by sending funds. Developers need a Razorpay account to receive funds and must generate a client ID and secret. 
 
 On the dashboard, developers or project creators can provide the project name, description, and link, allowing potential fund givers to learn about the project and decide whether to contribute. The refund policy is entirely at the discretion of the project developers.
 ## Tech Stack
@@ -77,4 +77,4 @@ Clone the repository:
 5. If you decide to contribute, click on the 'Pay' button by filling required data and you will be redirected to a secure payment page powered by Razorpay.
 6. After the transaction is successful, you will receive a confirmation of your contribution, and the funds will be directly transferred to the developer's Razorpay account.
 
-Thank you for your interest in Get Me A Chai! We hope this platform helps you successfully fund your projects and support developers in bringing their ideas to life.
+Thank you for your interest in Support Cafe! We hope this platform helps you successfully fund your projects and support developers in bringing their ideas to life.

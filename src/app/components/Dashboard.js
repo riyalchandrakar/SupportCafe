@@ -128,7 +128,7 @@ const Dashboard = () => {
 
                 <form className='max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md' onSubmit={handleSave}>
                     <div className="mb-6">
-                        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+                        <h2 className="text-xl font-semibold mb-4 text-text dark:text-white">
                             Stripe Integration
                         </h2>
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
@@ -177,7 +177,7 @@ const Dashboard = () => {
                                     ? 'bg-gray-500 cursor-not-allowed' 
                                     : isChange 
                                         ? 'bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 cursor-pointer'
-                                        : 'bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700'
+                                        : 'bg-gray-800 hover:bg-primary focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-primary dark:focus:ring-gray-700'
                                 }`}
                         >
                             {isSaving ? (
