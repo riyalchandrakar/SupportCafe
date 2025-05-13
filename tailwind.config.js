@@ -1,22 +1,28 @@
-const colors = require('tailwindcss/colors')
-
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+   content: [
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}", // Covers other folders like utils, models, etc.
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: "#6A0DAD",      // Purple shade for primary color
-        secondary: "#9B4D96",    // Lighter purple for accent color
-        background: "#F3E8FF",   // Light lavender/purple background
-        text: "#4B0082",         // Dark purple for text
+        purple: {
+          light: '#d8b4fe',
+          DEFAULT: '#a855f7',
+          dark: '#7e22ce',
+          darker: '#581c87',
+        },
+        primary: {
+          light: '#d8b4fe',
+          DEFAULT: '#a855f7',
+          dark: '#7e22ce',
+          darker: '#581c87',
+        },
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [],
 };

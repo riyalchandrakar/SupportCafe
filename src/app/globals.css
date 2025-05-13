@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Purple theme variables */
+:root {
+  --color-primary: #a855f7;
+  --color-primary-light: #d8b4fe;
+  --color-primary-dark: #7e22ce;
+  --color-primary-darker: #581c87;
+}
+
+/* Custom base styles */
+@layer base {
+  body {
+    @apply bg-purple-darker text-white;
+  }
+  
+  /* Purple scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-purple-darker;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-purple-dark rounded-full hover:bg-purple;
+  }
+}
+
+/* Custom components */
+@layer components {
+  .btn-primary {
+    @apply text-white bg-gradient-to-r from-purple to-purple-dark hover:from-purple-dark hover:to-purple-darker 
+           focus:ring-4 focus:outline-none focus:ring-purple-light font-medium rounded-lg 
+           text-sm px-5 py-2.5 text-center transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-purple-dark/30 backdrop-blur-sm rounded-xl p-6 border border-purple-light/10;
+  }
+  
+  /* Update your radial background */
+  .purple-radial-bg {
+    @apply bg-[radial-gradient(#a855f733_1px,#581c87_1px)] bg-[size:20px_20px];
+  }
+}

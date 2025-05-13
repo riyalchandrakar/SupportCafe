@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { fetchUser2, updateUser } from '@/actions/userActions'
 import { ToastContainer, toast, Slide } from 'react-toastify'
 import { PuffLoader } from 'react-spinners'
+import Image from 'next/image'
 
 const Dashboard = () => {
     const { data: session, status } = useSession()
@@ -112,83 +113,139 @@ const Dashboard = () => {
 
     if (status === 'loading' || isLoading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <PuffLoader color="#3B82F6" size={60} />
+            <div className="flex justify-center items-center h-screen bg-gradient-to-b from-purple-900 to-indigo-900">
+                <PuffLoader color="#d8b4fe" size={60} />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-gradient-to-b from-purple-900 to-indigo-900 text-white">
             <ToastContainer />
-            <div className="container mx-auto py-8 px-4 md:px-6">
-                <h1 className='text-center my-6 text-3xl font-bold text-gray-900 dark:text-white'>
-                    Welcome to Your Dashboard
-                </h1>
+            <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                {/* Profile Header */}
+                <div className="flex flex-col items-center mb-12">
+                    <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-purple-400/50 mb-4">
+                        <Image
+                            src={session?.user?.image || '/icons/user-default.png'}
+                            alt={session?.user?.name || 'User'}
+                            width={96}
+                            height={96}
+                            className="object-cover"
+                        />
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300">
+                        {session?.user?.name || 'Welcome Back'}
+                    </h1>
+                    <p className="text-purple-200">@{session?.user?.username || 'yourusername'}</p>
+                </div>
 
-                <form className='max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md' onSubmit={handleSave}>
-                    <div className="mb-6">
-                        <h2 className="text-xl font-semibold mb-4 text-text dark:text-white">
-                            Stripe Integration
+                {/* Dashboard Content */}
+                <div className="max-w-3xl mx-auto">
+                    <div className="bg-gradient-to-b from-purple-800/30 to-indigo-800/30 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20">
+                        <h2 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-pink-300">
+                            Payment Settings
                         </h2>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                            Add your Stripe credentials to accept payments
+                        <p className="text-purple-200 mb-6">
+                            Connect your Stripe account to start receiving payments from your supporters
                         </p>
 
-                        <div className="space-y-4">
-                            <div>
-                                <label htmlFor="stripeAccountId" className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-                                    Stripe Account ID
-                                </label>
-                                <input 
-                                    type="text" 
-                                    value={form.stripeAccountId} 
-                                    onChange={handleChange} 
-                                    name='stripeAccountId' 
-                                    id='stripeAccountId' 
-                                    className='block w-full p-2.5 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' 
-                                    placeholder="acct_xxxxxxxxxxxxx"
-                                />
+                        <form onSubmit={handleSave}>
+                            <div className="space-y-6">
+                                {/* Stripe Account ID */}
+                                <div>
+                                    <label htmlFor="stripeAccountId" className="block text-sm font-medium text-purple-100 mb-2">
+                                        Stripe Account ID
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            id="stripeAccountId"
+                                            name="stripeAccountId"
+                                            value={form.stripeAccountId}
+                                            onChange={handleChange}
+                                            className="w-full bg-purple-900/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                            placeholder="acct_xxxxxxxxxxxxx"
+                                        />
+                                        {form.stripeAccountId && (
+                                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                {form.stripeAccountId.startsWith('acct_') ? (
+                                                    <svg className="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className="mt-2 text-xs text-purple-300">
+                                        Find this in your <a href="https://dashboard.stripe.com/settings/account" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-200">Stripe Dashboard</a>
+                                    </p>
+                                </div>
+
+                                {/* Stripe Publishable Key */}
+                                <div>
+                                    <label htmlFor="stripePublishableKey" className="block text-sm font-medium text-purple-100 mb-2">
+                                        Stripe Publishable Key
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            id="stripePublishableKey"
+                                            name="stripePublishableKey"
+                                            value={form.stripePublishableKey}
+                                            onChange={handleChange}
+                                            className="w-full bg-purple-900/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                            placeholder="pk_test_xxxxxxxxxxxxx"
+                                        />
+                                        {form.stripePublishableKey && (
+                                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                {form.stripePublishableKey.startsWith('pk_') ? (
+                                                    <svg className="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className="mt-2 text-xs text-purple-300">
+                                        Find this in your <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-200">Stripe API Keys</a>
+                                    </p>
+                                </div>
                             </div>
 
-                            <div>
-                                <label htmlFor="stripePublishableKey" className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-                                    Stripe Publishable Key
-                                </label>
-                                <input 
-                                    type="text" 
-                                    value={form.stripePublishableKey} 
-                                    onChange={handleChange} 
-                                    name='stripePublishableKey' 
-                                    id='stripePublishableKey' 
-                                    className='block w-full p-2.5 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' 
-                                    placeholder="pk_test_xxxxxxxxxxxxx"
-                                />
+                            {/* Save Button */}
+                            <div className="mt-8 flex justify-center">
+                                <button
+                                    type="submit"
+                                    disabled={!isChange || isSaving}
+                                    className={`px-8 py-3 rounded-full font-medium transition-all duration-300 flex items-center justify-center
+                                        ${isSaving 
+                                            ? 'bg-purple-800 cursor-not-allowed' 
+                                            : isChange 
+                                                ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg hover:shadow-xl cursor-pointer'
+                                                : 'bg-purple-800/50 border border-purple-500/30 cursor-not-allowed'
+                                        }`}
+                                >
+                                    {isSaving ? (
+                                        <>
+                                            <PuffLoader size={20} color="#ffffff" className="mr-2" />
+                                            Saving...
+                                        </>
+                                    ) : 'Save Changes'}
+                                </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
-
-                    <div className="flex justify-center mt-8">
-                        <button
-                            type="submit"
-                            disabled={!isChange || isSaving}
-                            className={`w-full md:w-48 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center flex justify-center items-center transition-all
-                                ${isSaving 
-                                    ? 'bg-gray-500 cursor-not-allowed' 
-                                    : isChange 
-                                        ? 'bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 cursor-pointer'
-                                        : 'bg-gray-800 hover:bg-primary focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-primary dark:focus:ring-gray-700'
-                                }`}
-                        >
-                            {isSaving ? (
-                                <>
-                                    <PuffLoader size={20} color="#ffffff" className="mr-2" />
-                                    Saving...
-                                </>
-                            ) : 'Save Changes'}
-                        </button>
-                    </div>
-                </form>
+                   
+                </div>
             </div>
         </div>
     )

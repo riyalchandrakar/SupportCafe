@@ -13,7 +13,6 @@ const UserSchema = new Schema({
         default: "https://cdn.dribbble.com/users/3212981/screenshots/6751662/untitled-10_4x.jpg"
     },
     provider: { type: String },
-    // Replace Razorpay fields with Stripe fields
     stripeAccountId: { type: String },
     stripePublishableKey: { type: String },
     stripeAccessToken: { type: String }, // For OAuth connections

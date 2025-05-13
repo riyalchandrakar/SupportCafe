@@ -9,10 +9,9 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-// Generate metadata for the page (replaces document.title)
 export function generateMetadata({ params }) {
     return {
-        title: `Support - ${params.username}`, // Dynamically set the title
+        title: `Support - ${params.username}`,
     };
 }
 
@@ -21,8 +20,7 @@ const PaymentPage = ({ username }) => {
     const [paymentform, setPaymentform] = useState({
         name: '',
         message: '',
-        amount: '',
-        email: ''
+        amount: '' // Will store rupees as a string for display
     });
     const [currentUser, setCurrentUser] = useState({});
     const [payments, setPayments] = useState([]);
@@ -54,7 +52,10 @@ const PaymentPage = ({ username }) => {
             setCurrentUser(getUser);
             
             let dbPayments = await fetchPayments(username);
-            dbPayments = dbPayments.map(payment => JSON.parse(JSON.stringify(payment)));
+            dbPayments = dbPayments.map(payment => ({
+                ...JSON.parse(JSON.stringify(payment)),
+                amount: payment.amount / 100
+            }));
             setPayments(dbPayments);
         } catch (error) {
             console.error("Error getting Data:", error);
@@ -65,8 +66,9 @@ const PaymentPage = ({ username }) => {
         getData();
     }, [getData]);
 
-    const pay = async (amount) => {
-        // Validate inputs
+    const pay = async (amountInRupees) => {
+        const amountInPaise = Math.round(amountInRupees * 100);
+
         if (!paymentform.name) {
             toast.error('Name is Required', {
                 position: "bottom-right",
@@ -79,7 +81,7 @@ const PaymentPage = ({ username }) => {
             return;
         }
 
-        if (amount < 100) {
+        if (amountInPaise < 100) {
             toast.error('Amount must be at least ₹1', {
                 position: "bottom-right",
                 autoClose: 2500,
@@ -94,19 +96,17 @@ const PaymentPage = ({ username }) => {
         setStripeLoading(true);
         
         try {
-            // Create Stripe checkout session
             const response = await fetch('/api/payment/initiate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    amount: amount,
+                    amount: amountInPaise,
                     to_username: username,
                     paymentform: {
                         name: paymentform.name,
-                        message: paymentform.message || '',
-                        email: paymentform.email || ''
+                        message: paymentform.message || ''
                     }
                 })
             });
@@ -118,7 +118,6 @@ const PaymentPage = ({ username }) => {
             const { sessionId } = await response.json();
             const stripe = await stripePromise;
             
-            // Redirect to Stripe checkout
             const { error } = await stripe.redirectToCheckout({
                 sessionId: sessionId
             });
@@ -169,7 +168,7 @@ const PaymentPage = ({ username }) => {
                         <div className="font-bold text-lg">@{username}</div>
                         <div className='text-slate-400'>Let's help {username} to get a Chai</div>
                         <div className='text-slate-400'>
-                            {payments.length} Payments Received • ₹ {payments.reduce((a, b) => a + b.amount, 0)} raised
+                            {payments.length} Payments Received • ₹ {payments.reduce((a, b) => a + b.amount, 0).toFixed(2)} raised
                         </div>
                         {currentUser.project && (
                             <div className="container font-bold flex flex-col gap-2 bg-slate-900 p-5 mt-5 rounded-xl w-[70vw]">
@@ -202,7 +201,7 @@ const PaymentPage = ({ username }) => {
                                                 alt="Supporter" 
                                             />
                                             <span>
-                                                {p.name} <span className='font-bold'>₹{p.amount}</span>
+                                                {p.name} <span className='font-bold'>₹{p.amount.toFixed(2)}</span>
                                                 {p.message && `. Message: "${p.message}"`}
                                             </span>
                                         </li>
@@ -238,72 +237,57 @@ const PaymentPage = ({ username }) => {
                                     </div>
                                     <input 
                                         onChange={handleChange} 
-                                        value={paymentform.email} 
-                                        type="email" 
-                                        className='w-full p-3 rounded-lg bg-slate-800' 
-                                        name="email" 
-                                        placeholder='Enter Email (for receipt)' 
-                                    />
-                                    <input 
-                                        onChange={handleChange} 
                                         value={paymentform.message} 
                                         type="text" 
                                         className='w-full p-3 rounded-lg bg-slate-800' 
                                         name="message" 
                                         placeholder='Enter Message (optional)' 
                                     />
-                                    <input 
-                                        onChange={handleChange} 
-                                        value={paymentform.amount} 
-                                        type="number" 
-                                        className='w-full p-3 rounded-lg bg-slate-800' 
-                                        name="amount" 
-                                        placeholder='Enter Amount in ₹' 
-                                        min="1"
-                                    />
+                                    <div className="relative">
+                                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2">₹</span>
+                                        <input 
+                                            onChange={handleChange} 
+                                            value={paymentform.amount} 
+                                            type="number" 
+                                            className='w-full p-3 rounded-lg bg-slate-800 pl-8' 
+                                            name="amount" 
+                                            placeholder='Enter Amount' 
+                                            min="1"
+                                            step="0.01"
+                                        />
+                                    </div>
 
                                     <div className='flex justify-center items-center'>
                                         <button 
                                             type="button" 
-                                            onClick={() => pay(paymentform.amount * 100 || 0)} 
-                                            disabled={stripeLoading}
-                                            className={`text-white w-48 hover:w-[70%] bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-primary-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition-all duration-300 ease-in-out ${
-                                                stripeLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                            onClick={() => pay(parseFloat(paymentform.amount) || 0)} 
+                                            disabled={stripeLoading || !paymentform.amount || parseFloat(paymentform.amount) < 1}
+                                            className={`text-white w-48 hover:w-[70%] bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition-all duration-300 ease-in-out ${
+                                                stripeLoading || !paymentform.amount || parseFloat(paymentform.amount) < 1 ? 'opacity-50 cursor-not-allowed' : ''
                                             }`}
                                         >
-                                            {stripeLoading ? 'Processing...' : 'Pay Now'}
+                                            {stripeLoading ? 'Processing...' : `Pay ₹${paymentform.amount || '0'}`}
                                         </button>
                                     </div>
                                 </div>
                                 <div className="flex gap-5 mt-5 justify-center flex-wrap">
-                                    <button 
-                                        className='bg-slate-800 p-3 rounded-lg hover:bg-primary transition-colors' 
-                                        onClick={() => pay(1000)} 
-                                        disabled={stripeLoading}
-                                    >
-                                        Pay ₹10
-                                    </button>
-                                    <button 
-                                        className='bg-slate-800 p-3 rounded-lg hover:bg-primary transition-colors' 
-                                        onClick={() => pay(10000)} 
-                                        disabled={stripeLoading}
-                                    >
-                                        Pay ₹100
-                                    </button>
-                                    <button 
-                                        className='bg-slate-800 p-3 rounded-lg hover:bg-primary transition-colors' 
-                                        onClick={() => pay(50000)} 
-                                        disabled={stripeLoading}
-                                    >
-                                        Pay ₹500
-                                    </button>
-                                    <button 
-                                        className='bg-slate-800 p-3 rounded-lg hover:bg-primary transition-colors' 
-                                        onClick={() => pay(100000)} 
-                                        disabled={stripeLoading}
-                                    >
-                                        Pay ₹1000
-                                    </button>
+                                    {[10, 50, 100, 500, 1000].map((amount) => (
+                                        <button 
+                                            key={amount}
+                                            className='bg-slate-800 p-3 rounded-lg hover:bg-slate-700 transition-colors flex items-center gap-1' 
+                                            onClick={() => {
+                                                setPaymentform({
+                                                    ...paymentform,
+                                                    amount: amount.toString()
+                                                });
+                                                pay(amount);
+                                            }}
+                                            disabled={stripeLoading}
+                                        >
+                                            <span>Pay</span>
+                                            <span className="font-bold">₹{amount}</span>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                         </div>
